@@ -46,7 +46,7 @@ post "/" do
   temp = params[:archive][:tempfile]
 
   materialize(name, temp) do |file|
-    @document = Clicksign::Document.create(file,skip_email: true)
+    @document = Clicksign::Document.create(file)
   end
 
   redirect to("/#{@document['key']}"), 303
