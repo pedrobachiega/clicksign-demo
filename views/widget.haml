@@ -1,0 +1,25 @@
+%div
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+%div#container
+
+%div
+  Suspendisse libero purus, fringilla et laoreet eget, varius vitae nisi.
+
+%script(src="/javascripts/clicksign.js" type="text/javascript")
+
+:coffee
+  callback = (event) ->
+    alert "Callback called with: \#{event.data}"
+
+  clicksign.configure
+    container: "container"
+    key: "#{@key}"
+    protocol: "#{settings.protocol}"
+    host: "#{settings.widget_host}"
+    timeout: 15000
+    signer:
+      email: "#{@email}"
+      display_name: "John Doe"
+      documentation: "01234567890"
+    callback: callback
