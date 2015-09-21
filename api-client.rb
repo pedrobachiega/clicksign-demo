@@ -16,6 +16,8 @@ configure do
   set :api_host, "api.#{settings.host}"
   set :widget_host, "widget.#{settings.host}"
 
+  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
   Clicksign.configure do |config|
     config.token = settings.access_token
     config.endpoint = "#{settings.protocol}://#{settings.api_host}"
@@ -49,12 +51,19 @@ post "/" do
     @document = Clicksign::Document.create(file)
   end
 
-  redirect to("/#{@document['key']}"), 303
+  puts  ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  puts @document
+  puts @document['document']['key']
+  puts  "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  redirect to("/#{@document['document']['key']}"), 303
 end
 
 # Show a specific document
 get %r{/#{KEY}$} do |key|
   @document = Clicksign::Document.find(key)['document']
+  puts  ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  puts @document
+  puts  "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   haml :show
 end
 
@@ -62,9 +71,17 @@ end
 post %r{/#{KEY}/list$} do |key|
   emails = params[:emails].each_line.collect { |line| line.chomp.split(",") }
   signers = emails.collect { |email, act| { email: email, act: act }}
+  # puts "----------------------------------"
+  # puts "#{emails}"
+  # puts "#{emails.first}"
+  # puts "#{signers}"
+  # puts "----------------------------------"
 
   @document = Clicksign::Document.create_list(key, signers, true)['document']
-  redirect to("/#{@document['key']}"), 303
+  puts  ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  puts @document
+  puts  "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  redirect to("/#{@document['key']}/widget?email=#{emails.first.first}"), 303
 end
 
 # Show a document widget

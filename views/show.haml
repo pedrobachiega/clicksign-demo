@@ -1,12 +1,15 @@
-%h1= @document['original_name']
-
+<h1>Clicksign Demo</h1>
+%h2= @document['original_name']
+<div>
 %dl
   %dt Key
   %dd= @document['key']
 
   %dt Started at
   %dd= @document['list']['started_at']
+</div>
 
+<div>
 - unless @document['list']['started_at']
   %form(action="/#{@document['key']}/list" method="post")
     %label(for="emails") Signers and actions, one per line
@@ -14,7 +17,7 @@
 
     %input(type="submit" value="Request signatures")
 - else
-  %table
+  %table(border=1)
     %thead
       %tr
         %td E-mail
@@ -38,5 +41,6 @@
     %input(id="email" name="email" type="email")
 
     %input(type="submit" value="View inside widget")
+</div>
 
 %a(href="/") Back

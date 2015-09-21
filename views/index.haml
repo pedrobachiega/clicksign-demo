@@ -1,9 +1,24 @@
+<h1>Clicksign Demo</h1>
+<div>
+<h2>Upload a file to test</h2>
 %form(action="/" method="post" enctype="multipart/form-data")
   %label(for="archive") File
   %input(id="archive" name="archive" type="file")
 
   %input(type="submit" value="Upload")
 
+</div>
+<hr/>
+<div>
+<h2>Documents list</h2>
+%ul
+  - @documents.each do |document|
+    %li
+      %a(href="/#{document['key']}")= "#{document['original_name']} - (#{document['status']})"
+</div>
+<hr/>
+<div>
+<h2>Creating a batch</h2>
 %form(action="/batches" method="post")
   %ul
     - @documents.each do |document|
@@ -12,3 +27,5 @@
         %a(href="/#{document['key']}")= document['original_name']
 
   %input(type="submit" value="Criar pacote")
+
+</div>
